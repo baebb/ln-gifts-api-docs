@@ -1,20 +1,14 @@
----
+3---
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
   - javascript
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
-includes:
-  - errors
-
-search: true
+search: false
 ---
 
 # Introduction
@@ -25,27 +19,10 @@ We have language bindings in Shell, Ruby, Python, and JavaScript! You can view c
 
 This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
+<!---
 # Authentication
 
 > To authorize, use this code:
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
 
 ```javascript
 const kittn = require('kittn');
@@ -64,76 +41,50 @@ Kittn expects for the API key to be included in all API requests to the server i
 <aside class="notice">
 You must replace <code>meowmeowmeow</code> with your personal API key.
 </aside>
+-->
 
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
+# Create Gift
 
 ```javascript
-const kittn = require('kittn');
+const axios = require('axios');
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+axios.post('https://api.lightning.gifts/create', { amount: 5000 })
+    .then(response => response.data)
+    .catch(error => Promise.reject(error));
 ```
 
-> The above command returns JSON structured like this:
+> The above command will return an Invoice:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+{
+    "order_id": "03a1fb575647d7d79909785c2648e98397ec15e6d6d2562d",
+    "charge_id":  "340c81e5-575a-4ff2-9cb6-d6cfe6e953ea",
+    "status":  "unpaid",
+    "lightning_invoice": {
+      "expires_at": 1566215853,
+      "payreq": "LNBC5910N1PW44QYAPP5ECXL4F4SW8K67D4WLEDR24E52NKE5Y0SQHJ2R7LYC2CCDCS2XCNQDPVF35KW6R5DE5KUEEQVA5KVAPQVEHHYGP48YCJQUMPW3ESCQZPGRC2RU3M7D204Z6NRUCS26FH90K44M4RY07RL9FKSY85WJWVA9LLHJNCQWQ7Y7MX88F6JRJGEKDTFTU0A5PXK5DRTVXYYWADERZ6TH6CQT5FX0U"
+    },
+    "amount": 5000,
+    "lnurl": "lnurl1dp68gurn8ghj7ctsdyhxc6t8dp6xu6twvuhxw6txw3ej7mrww4exctekxa3rwwt9v3skgv35xf3nzepcvccngvesxpjxyce4xaskydm9x43nsenpxenrjdpjxcmkgcfex9jq8rlhyf"
+}
 ```
 
-This endpoint retrieves all kittens.
+This endpoint creates an invoice for a new Lightning Gift. 
 
-### HTTP Request
+After paying the invoice, the gift can be redeemed from the returned order_id at `https://lightning.gifts/redeem/{order_id}` 
+or using the returned lnurl.
 
-`GET http://example.com/api/kittens`
+### HTTPS Request
+
+`POST https://api.lightning.gifts/create`
 
 ### Query Parameters
 
-Parameter | Default | Description
+Parameter | Type | Description
 --------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+`amount` | `Number` | Amount of the gift in Satoshis
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
+# Get a Specific Kitten
 
 ```ruby
 require 'kittn'
@@ -187,7 +138,7 @@ Parameter | Description
 --------- | -----------
 ID | The ID of the kitten to retrieve
 
-## Delete a Specific Kitten
+# Delete a Specific Kitten
 
 ```ruby
 require 'kittn'
