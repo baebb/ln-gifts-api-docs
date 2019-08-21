@@ -1,5 +1,5 @@
-3---
-title: API Reference
+---
+title: Lightning Gifts API
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
@@ -45,15 +45,17 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 
 # Create Gift
 
+## /create
+
 ```javascript
 const axios = require('axios');
 
-axios.post('https://api.lightning.gifts/create', { amount: 5000 })
+axios.post('https://api.lightning.gifts/create', { amount: 5000, notify: 'https://your webhook url' })
     .then(response => response.data)
     .catch(error => Promise.reject(error));
 ```
 
-> The above command will return an Invoice:
+> 200 OK:
 
 ```json
 {
@@ -62,17 +64,17 @@ axios.post('https://api.lightning.gifts/create', { amount: 5000 })
     "status":  "unpaid",
     "lightning_invoice": {
       "expires_at": 1566215853,
-      "payreq": "LNBC5910N1PW44QYAPP5ECXL4F4SW8K67D4WLEDR24E52NKE5Y0SQHJ2R7LYC2CCDCS2XCNQDPVF35KW6R5DE5KUEEQVA5KVAPQVEHHYGP48YCJQUMPW3ESCQZPGRC2RU3M7D204Z6NRUCS26FH90K44M4RY07RL9FKSY85WJWVA9LLHJNCQWQ7Y7MX88F6JRJGEKDTFTU0A5PXK5DRTVXYYWADERZ6TH6CQT5FX0U"
+      "payreq": "LNBC..."
     },
     "amount": 5000,
-    "lnurl": "lnurl1dp68gurn8ghj7ctsdyhxc6t8dp6xu6twvuhxw6txw3ej7mrww4exctekxa3rwwt9v3skgv35xf3nzepcvccngvesxpjxyce4xaskydm9x43nsenpxenrjdpjxcmkgcfex9jq8rlhyf"
+    "lnurl": "lnurl..."
 }
 ```
 
-This endpoint creates an invoice for a new Lightning Gift. 
+Creates a BOLT-11 invoice for a new Lightning Gift. 
 
-After paying the invoice, the gift can be redeemed from the returned order_id at `https://lightning.gifts/redeem/{order_id}` 
-or using the returned lnurl.
+After paying the invoice, the Lightning Gift will be created. The gift can then be redeemed at `https://lightning.gifts/redeem/{order_id}` 
+or using the `lnurl`.
 
 ### HTTPS Request
 
@@ -82,109 +84,115 @@ or using the returned lnurl.
 
 Parameter | Type | Description
 --------- | ------- | -----------
-`amount` | `Number` | Amount of the gift in Satoshis
+`amount` | number | *Required* Amount of the gift in Satoshis
+`notify` | string | *Optional* URL to receive webhook when gift is redeemed. Must start with `http` or `https`
 
-# Get a Specific Kitten
+# Check Gift Invoice Status
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
+## /invoice_status
 
 ```javascript
-const kittn = require('kittn');
+const axios = require('axios');
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+return axios.get(`https://api.lightning.gifts/status/${charge_id}`)
+    .then(response => response.data)
+    .catch(error => Promise.reject(error));
 ```
 
-> The above command returns JSON structured like this:
+> 200 OK:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+    "status":  "unpaid/processing/paid"
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+Returns the status of an invoice generated from `/create`.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://api.lightning.gifts/status/<charge_id>`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+Parameter | Type | Description
+--------- | ------- | -----------
+`charge_id` | string | *Required* Charge ID of invoice created in `/create`
 
-# Delete a Specific Kitten
+# Redeem Gift
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
+## /redeem
 
 ```javascript
-const kittn = require('kittn');
+const axios = require('axios');
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+return axios.post(`https://api.lightning.gifts/redeem/${order_id}`, { invoice: 'LNBC...' })
+    .then(response => response.data)
+    .catch(error => Promise.reject(error));
 ```
 
-> The above command returns JSON structured like this:
+> 200 OK:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "withdrawal_id": "ba8f8f99-8b03-4b22-9275-4bf2b8e3e7c2"
 }
 ```
 
-This endpoint deletes a specific kitten.
+Redeem a Lightning Gift. 
+
+Invoice must be for **exactly** the same amount of the gift.
+
+Returns a `withdrawal_id` that you can use to check the status of the gift redeem using `/redeemStatus`. 
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`POST https://api.lightning.gifts/redeem/<order_id>`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+Parameter | Type | Description
+--------- | ------- | -----------
+`order_id` | string | *Required* Order ID from `/create`
+
+### Query Parameters
+
+Parameter | Type | Description
+--------- | ------- | -----------
+`invoice` | string | *Required* BOLT-11 invoice to receive the gift
+
+# Check Gift Redeem Status
+
+## /redeem_status
+
+```javascript
+const axios = require('axios');
+
+return axios.get(`https://api.lightning.gifts/redeemStatus/${withdrawal_id}`)
+    .then(response => response.data)
+    .catch(error => Promise.reject(error));
+```
+
+> 200 OK:
+
+```json
+{
+    "reference": "LNBC...",
+    "status": "initial/confirmed"
+}
+```
+
+Returns the status of a gift redeem using `/redeem`. `reference` is the BOLT-11 invoice that was used.
+
+### HTTP Request
+
+`GET https://api.lightning.gifts/redeemStatus/<withdrawal_id>`
+
+### URL Parameters
+
+Parameter | Type | Description
+--------- | ------- | -----------
+`withdrawal_id` | string | *Required* Withdrawal ID provided by `/redeem`
+
+
 
