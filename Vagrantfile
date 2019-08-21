@@ -1,6 +1,6 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
-  config.vm.network :forwarded_port, guest: 4567, host: 4567
+  config.vm.network :forwarded_port, guest: 4568, host: 4568
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "2048"
   end
@@ -36,7 +36,7 @@ Vagrant.configure(2) do |config|
     run: "always",
     inline: <<-SHELL
       echo "=============================================="
-      echo "Starting up middleman at http://localhost:4567"
+      echo "Starting up middleman at http://localhost:4568"
       echo "If it does not come up, check the ~/middleman.log file for any error messages"
       cd /vagrant
       bundle exec middleman server --watcher-force-polling --watcher-latency=1 &> ~/middleman.log &
