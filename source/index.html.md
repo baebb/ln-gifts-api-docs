@@ -55,10 +55,10 @@ axios.post('https://api.lightning.gifts/create', { amount: 5000, notify: 'https:
 
 ```json
 {
-    "order_id": "03a1fb575647d7d79909785c2648e98397ec15e6d6d2562d",
-    "charge_id":  "340c81e5-575a-4ff2-9cb6-d6cfe6e953ea",
+    "orderId": "03a1fb575647d7d79909785c2648e98397ec15e6d6d2562d",
+    "chargeId":  "340c81e5-575a-4ff2-9cb6-d6cfe6e953ea",
     "status":  "unpaid",
-    "lightning_invoice": {
+    "lightningInvoice": {
       "expires_at": 1566215853,
       "payreq": "LNBC..."
     },
@@ -69,7 +69,7 @@ axios.post('https://api.lightning.gifts/create', { amount: 5000, notify: 'https:
 
 Creates a BOLT-11 invoice for a new Lightning Gift. 
 
-After paying the invoice, the Lightning Gift will be created. The gift can then be redeemed at `https://lightning.gifts/redeem/{order_id}` 
+After paying the invoice, the Lightning Gift will be created. The gift can then be redeemed at `https://lightning.gifts/redeem/{orderId}` 
 or using the `lnurl`.
 
 ### HTTPS Request
@@ -90,7 +90,7 @@ Parameter | Type | Description
 ```javascript
 const axios = require('axios');
 
-return axios.get(`https://api.lightning.gifts/status/${charge_id}`)
+return axios.get(`https://api.lightning.gifts/status/${chargeId}`)
     .then(response => response.data)
     .catch(error => Promise.reject(error));
 ```
@@ -107,13 +107,88 @@ Returns the status of an invoice generated from `/create`.
 
 ### HTTP Request
 
-`GET https://api.lightning.gifts/status/<charge_id>`
+`GET https://api.lightning.gifts/status/<chargeId>`
 
 ### URL Parameters
 
 Parameter | Type | Description
 --------- | ------- | -----------
-`charge_id` | string | *Required* Charge ID of invoice created in `/create`
+`chargeId` | string | *Required* Charge ID of invoice created in `/create`
+
+# Get Gift Details
+
+## /gift
+
+```javascript
+const axios = require('axios');
+
+return axios.get(`https://api.lightning.gifts/gift/${orderId}`)
+    .then(response => response.data)
+    .catch(error => Promise.reject(error));
+```
+
+> 200 OK unspent:
+
+```json
+{
+    "amount": 1000,
+    "id": "a8bd69283e8669b6c3c9a47f98bb844792d828f66293d4g6",
+    "notify": null,
+    "createdAt": {
+        "_seconds": 1566648057,
+        "_nanoseconds": 128000000
+    },
+    "chargeInfo": {
+        "chargeId": "8b0b8194-f602-40ab-8f42-ba6387ac93d7",
+        "chargeInvoice": "LNBC..."
+    },
+    "spent": false,
+    "orderId": "a8bd69283e8669b6c3c9a47f98bb844792d828f66293d4g6",
+    "lnurl": "lnurl..."
+}
+```
+
+> 200 OK spent:
+
+```json
+{
+	 "amount": 1000,
+    "id": "a8bd69283e8669b6c3c9a47f98bb844792d828f66293d4g6",
+    "notify": null,
+    "createdAt": {
+        "_seconds": 1566648057,
+        "_nanoseconds": 128000000
+    },
+    "chargeInfo": {
+        "chargeId": "8b0b8194-f602-40ab-8f42-ba6387ac93d7",
+        "chargeInvoice": "LNBC..."
+    },
+    "spent": true,
+    "orderId": "a8bd69283e8669b6c3c9a47f98bb844792d828f66293d4g6",
+    "lnurl": "lnurl..."
+    "withdrawalInfo": {
+        "withdrawalId": "ge35637a-a80e-4c54-81c8-7971e87f4df2",
+        "withdrawalInvoice": "lnbc...",
+        "createdAt": {
+            "_seconds": 1566758278,
+            "_nanoseconds": 18000000
+        },
+        "fee": "0"
+    }	
+}
+```
+
+Gets a gift's details.
+
+### HTTP Request
+
+`GET https://api.lightning.gifts/gift/<orderId>`
+
+### URL Parameters
+
+Parameter | Type | Description
+--------- | ------- | -----------
+`orderId` | string | *Required* Order ID provided by `/create`
 
 # Redeem Gift
 
@@ -122,7 +197,7 @@ Parameter | Type | Description
 ```javascript
 const axios = require('axios');
 
-return axios.post(`https://api.lightning.gifts/redeem/${order_id}`, { invoice: 'LNBC...' })
+return axios.post(`https://api.lightning.gifts/redeem/${orderId}`, { invoice: 'LNBC...' })
     .then(response => response.data)
     .catch(error => Promise.reject(error));
 ```
@@ -131,7 +206,7 @@ return axios.post(`https://api.lightning.gifts/redeem/${order_id}`, { invoice: '
 
 ```json
 {
-  "withdrawal_id": "ba8f8f99-8b03-4b22-9275-4bf2b8e3e7c2"
+  "withdrawalId": "ba8f8f99-8b03-4b22-9275-4bf2b8e3e7c2"
 }
 ```
 
@@ -139,17 +214,17 @@ Redeem a Lightning Gift.
 
 Invoice must be for **exactly** the same amount of the gift.
 
-Returns a `withdrawal_id` that you can use to check the status of the gift redeem using `/redeemStatus`. 
+Returns a `withdrawalId` that you can use to check the status of the gift redeem using `/redeemStatus`. 
 
 ### HTTP Request
 
-`POST https://api.lightning.gifts/redeem/<order_id>`
+`POST https://api.lightning.gifts/redeem/<orderId>`
 
 ### URL Parameters
 
 Parameter | Type | Description
 --------- | ------- | -----------
-`order_id` | string | *Required* Order ID from `/create`
+`orderId` | string | *Required* Order ID from `/create`
 
 ### Query Parameters
 
@@ -164,7 +239,7 @@ Parameter | Type | Description
 ```javascript
 const axios = require('axios');
 
-return axios.get(`https://api.lightning.gifts/redeemStatus/${withdrawal_id}`)
+return axios.get(`https://api.lightning.gifts/redeemStatus/${withdrawalId}`)
     .then(response => response.data)
     .catch(error => Promise.reject(error));
 ```
@@ -182,13 +257,13 @@ Returns the status of a gift redeem using `/redeem`. `reference` is the BOLT-11 
 
 ### HTTP Request
 
-`GET https://api.lightning.gifts/redeemStatus/<withdrawal_id>`
+`GET https://api.lightning.gifts/redeemStatus/<withdrawalId>`
 
 ### URL Parameters
 
 Parameter | Type | Description
 --------- | ------- | -----------
-`withdrawal_id` | string | *Required* Withdrawal ID provided by `/redeem`
+`withdrawalId` | string | *Required* Withdrawal ID provided by `/redeem`
 
 
 
