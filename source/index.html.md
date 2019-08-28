@@ -9,7 +9,7 @@ search: false
 
 # Lightning Gifts API
 
-This document is for review only
+Welcome to Lightning Gifts API docs! If you have any issues or need help with using the API or lnurl DM @baebb_code on Twitter :D
 
 <!---
 toc_footers:
@@ -85,7 +85,7 @@ Parameter | Type | Description
 
 # Check Gift Invoice Status
 
-## /invoice_status
+## /invoiceStatus
 
 ```javascript
 const axios = require('axios');
@@ -234,7 +234,7 @@ Parameter | Type | Description
 
 # Check Gift Redeem Status
 
-## /redeem_status
+## /redeemStatus
 
 ```javascript
 const axios = require('axios');
