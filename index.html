@@ -229,7 +229,7 @@
             <a href="#check-gift-invoice-status" class="toc-h1 toc-link" data-title="Check Gift Invoice Status">Check Gift Invoice Status</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#invoice_status" class="toc-h2 toc-link" data-title="/invoice_status">/invoice_status</a>
+                    <a href="#invoicestatus" class="toc-h2 toc-link" data-title="/invoiceStatus">/invoiceStatus</a>
                   </li>
               </ul>
           </li>
@@ -253,7 +253,7 @@
             <a href="#check-gift-redeem-status" class="toc-h1 toc-link" data-title="Check Gift Redeem Status">Check Gift Redeem Status</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#redeem_status" class="toc-h2 toc-link" data-title="/redeem_status">/redeem_status</a>
+                    <a href="#redeemstatus" class="toc-h2 toc-link" data-title="/redeemStatus">/redeemStatus</a>
                   </li>
               </ul>
           </li>
@@ -263,7 +263,7 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='lightning-gifts-api'>Lightning Gifts API</h1>
-<p>This document is for review only</p>
+<p>Welcome to Lightning Gifts API docs! If you have any issues or need help with using the API or lnurl DM @baebb_code on Twitter :D</p>
 
 <!---
 toc_footers:
@@ -338,7 +338,7 @@ or using the <code>lnurl</code>.</p>
 <td><em>Optional</em> URL to receive webhook when gift is redeemed. Must start with <code>http</code> or <code>https</code></td>
 </tr>
 </tbody></table>
-<h1 id='check-gift-invoice-status'>Check Gift Invoice Status</h1><h2 id='invoice_status'>/invoice_status</h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">axios</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'axios'</span><span class="p">);</span>
+<h1 id='check-gift-invoice-status'>Check Gift Invoice Status</h1><h2 id='invoicestatus'>/invoiceStatus</h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">axios</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'axios'</span><span class="p">);</span>
 
 <span class="k">return</span> <span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">`https://api.lightning.gifts/status/</span><span class="p">${</span><span class="nx">chargeId</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
@@ -488,7 +488,7 @@ or using the <code>lnurl</code>.</p>
 <td><em>Required</em> BOLT-11 invoice to receive the gift</td>
 </tr>
 </tbody></table>
-<h1 id='check-gift-redeem-status'>Check Gift Redeem Status</h1><h2 id='redeem_status'>/redeem_status</h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">axios</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'axios'</span><span class="p">);</span>
+<h1 id='check-gift-redeem-status'>Check Gift Redeem Status</h1><h2 id='redeemstatus'>/redeemStatus</h2><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">axios</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'axios'</span><span class="p">);</span>
 
 <span class="k">return</span> <span class="nx">axios</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">`https://api.lightning.gifts/redeemStatus/</span><span class="p">${</span><span class="nx">withdrawalId</span><span class="p">}</span><span class="s2">`</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
