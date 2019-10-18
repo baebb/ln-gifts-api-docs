@@ -9,7 +9,13 @@ search: false
 
 # Lightning Gifts API
 
-Welcome to Lightning Gifts API docs! If you have any issues, need help with using the API or lnurl DM @baebb_code on Twitter
+Welcome to Lightning Gifts API docs! If you have any issues, need help with using the API or lnurl DM @baebb_code on Twitter.
+
+Before you being using [please fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSdzOftJb1n2OJv5s7QhH21kbLgSKiQ0YIjm1uaBnKFd197V2w/viewform?usp=send_form) so I can understand your needs better and email you with API changes.
+
+# Rate limits
+
+Requests are rate limited to prevent abuse and encourage best practises. Please use webhooks instead of querying `/gift` to get create or redeem confirmations. 
 
 # Create Gift
 
@@ -63,6 +69,10 @@ Parameter | Type | Description
 `notify` | string | *Optional* URL to receive webhook when gift is redeemed. Must start with `http` or `https`
 `senderName` | string | *Optional* Name of sender
 `senderMessage` | string | *Optional* Message to the recipient
+
+### Rate limit
+
+50/15 minutes
 
 <!-- 
 # Check Gift Invoice Status [Depreciated]
@@ -179,6 +189,10 @@ Parameter | Type | Description
 --------- | ------- | -----------
 `orderId` | string | *Required* Order ID provided by `/create`
 
+### Rate limit
+
+200/15 minutes
+
 # Redeem Gift
 
 ## /redeem
@@ -223,6 +237,10 @@ Parameter | Type | Description
 --------- | ------- | -----------
 `invoice` | string | *Required* BOLT-11 invoice to receive the gift
 
+### Rate limit
+
+50/15 minutes
+
 # Check Gift Redeem Status
 
 ## /redeemStatus
@@ -255,6 +273,10 @@ Returns the status of a gift redeem using `/redeem`. `reference` is the BOLT-11 
 Parameter | Type | Description
 --------- | ------- | -----------
 `withdrawalId` | string | *Required* Withdrawal ID provided by `/redeem`
+
+### Rate limit
+
+200/15 minutes
 
 
 
