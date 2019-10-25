@@ -61,7 +61,7 @@ or using the `lnurl`.
 
 `POST https://api.lightning.gifts/create`
 
-### Query Parameters
+### Body Parameters
 
 Parameter | Type | Description
 --------- | ------- | -----------
@@ -231,7 +231,7 @@ Parameter | Type | Description
 --------- | ------- | -----------
 `orderId` | string | *Required* Order ID from `/create`
 
-### Query Parameters
+### Body Parameters
 
 Parameter | Type | Description
 --------- | ------- | -----------
