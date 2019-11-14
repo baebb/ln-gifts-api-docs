@@ -11,7 +11,7 @@ search: false
 
 Welcome to Lightning Gifts API docs! If you have any issues, need help with using the API or lnurl DM @baebb_code on Twitter.
 
-Before you being using [please fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSdzOftJb1n2OJv5s7QhH21kbLgSKiQ0YIjm1uaBnKFd197V2w/viewform?usp=send_form) so I can understand your needs better and email you with API changes.
+Before you begin using the API [please fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSdzOftJb1n2OJv5s7QhH21kbLgSKiQ0YIjm1uaBnKFd197V2w/viewform?usp=send_form) so I can understand your needs better and email you with API changes.
 
 # Rate limits
 
@@ -19,7 +19,7 @@ Requests are rate limited to prevent abuse and encourage best practises. Please 
 
 # Create Gift
 
-## /create
+## `POST` /create
 
 ```javascript
 const axios = require('axios');
@@ -69,6 +69,7 @@ Parameter | Type | Description
 `notify` | string | *Optional* URL to receive webhook when gift is redeemed. Must start with `http` or `https`
 `senderName` | string | *Optional* Name of sender
 `senderMessage` | string | *Optional* Message to the recipient
+`verifyCode` | number | *Optional* Add a 4-digit security code to your gift
 
 ### Rate limit
 
@@ -110,7 +111,7 @@ Parameter | Type | Description
 
 # Get Gift Details
 
-## /gift
+## `GET` /gift
 
 ```javascript
 const axios = require('axios');
@@ -189,13 +190,19 @@ Parameter | Type | Description
 --------- | ------- | -----------
 `orderId` | string | *Required* Order ID provided by `/create`
 
+### Query Parameters
+
+Parameter | Type | Description
+--------- | ------- | -----------
+`verifyCode` | number | *Optional* For gifts with `verifyCode` set in `/create` 
+
 ### Rate limit
 
 200/15 minutes
 
 # Redeem Gift
 
-## /redeem
+## `POST` /redeem
 
 ```javascript
 const axios = require('axios');
@@ -236,6 +243,7 @@ Parameter | Type | Description
 Parameter | Type | Description
 --------- | ------- | -----------
 `invoice` | string | *Required* BOLT-11 invoice to receive the gift
+`verifyCode` | number | *Optional* For gifts with `verifyCode` set in `/create`
 
 ### Rate limit
 
@@ -243,7 +251,7 @@ Parameter | Type | Description
 
 # Check Gift Redeem Status
 
-## /redeemStatus
+## `GET` /redeemStatus
 
 ```javascript
 const axios = require('axios');
