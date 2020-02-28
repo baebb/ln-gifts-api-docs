@@ -15,7 +15,7 @@ Before you begin using the API [please fill out this form](https://docs.google.c
 
 # Rate limits
 
-Requests are rate limited to prevent abuse and encourage best practises. Please use webhooks instead of querying `/gift` to get create or redeem confirmations. 
+Requests are rate limited to prevent abuse and encourage best practises. Please use the `notify` option at gift creation instead of querying `/gift` to notification of gift redemption. 
 
 # Create Gift
 
@@ -52,6 +52,17 @@ axios.post('https://api.lightning.gifts/create', {
 }
 ```
 
+> Webhook data [sent on gift redeem via POST]:
+
+```json
+{ 
+    "id": "03a1fb575647d7d79909785c2648e98397ec15e6d6d2562d",
+    "orderId": "03a1fb575647d7d79909785c2648e98397ec15e6d6d2562d",
+    "amount": 5000, 
+    "spent": true 
+}
+```
+
 Creates a BOLT-11 invoice for a new Lightning Gift. 
 
 After paying the invoice, the Lightning Gift will be created. The gift can then be redeemed at `https://lightning.gifts/redeem/{orderId}` 
@@ -70,6 +81,10 @@ Parameter | Type | Description
 `senderName` | string | *Optional* Name of sender
 `senderMessage` | string | *Optional* Message to the recipient
 `verifyCode` | number | *Optional* Add a 4-digit security code to your gift
+
+### Redeem notify webhook
+
+If you supplied a valid URL for `notify` parameter, on gift redemption a payload containing `orderId`, `amount`, and `spent`-status will be sent via POST.
 
 ### Rate limit
 
