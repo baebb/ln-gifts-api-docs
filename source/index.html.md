@@ -9,7 +9,7 @@ search: false
 
 # Lightning Gifts API
 
-Welcome to Lightning Gifts API docs! If you have any issues, need help with using the API or lnurl DM @baebb_code on Twitter.
+Welcome to Lightning Gifts API docs! If you have any issues, need help with using the API or lnurl DM @internet_ross on Twitter.
 
 Before you begin using the API [please fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSdzOftJb1n2OJv5s7QhH21kbLgSKiQ0YIjm1uaBnKFd197V2w/viewform?usp=send_form) so I can understand your needs better and email you with API changes.
 
